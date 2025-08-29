@@ -3,7 +3,6 @@
 subdir('executor')
 subdir('storage')
 subdir('utils')
-subdir('port')
 
 
 vci_sources = files(
