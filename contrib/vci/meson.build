@@ -19,8 +19,6 @@ vci_sources += vci_storage_sources
 
 vci_sources += vci_utils_sources
 
-vci_sources += vci_port_sources
-
 if host_system == 'windows'
   vci_sources += rc_lib_gen.process(win32ver_rc, extra_args: [
     '--NAME', 'vci',
