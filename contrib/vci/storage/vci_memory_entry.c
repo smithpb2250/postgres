@@ -433,9 +433,17 @@ determineRoomPosition(Oid oid)
 static void
 setLockTagPointer(LOCKTAG *locktag, void *ptr)
 {
-	locktag->locktag_field1 = ((uintptr_t) ptr) & 0xFFFFFFFF;
+	uintptr_t addr = (uintptr_t) ptr;
+
+	locktag->locktag_field1 = (uint32) (addr & 0xFFFFFFFF);
 	locktag->locktag_field2 = 0;
-	locktag->locktag_field3 = (((uintptr_t) ptr) >> 32) & 0xFFFFFFFF;
+#if SIZEOF_VOID_P >= 8
+	/* On 64-bit platforms, store high 32 bits */
+	locktag->locktag_field3 = (uint32) ((addr >> 32) & 0xFFFFFFFF);
+#else
+	/* On 32-bit platforms, high bits are always zero */
+	locktag->locktag_field3 = 0;
+#endif
 	locktag->locktag_field4 = 0;
 	locktag->locktag_type = VCI_LOCKTAG_MEMORY_ENTRY;
 	locktag->locktag_lockmethodid = DEFAULT_LOCKMETHOD;
